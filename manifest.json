@@ -1,7 +1,15 @@
 {
 	"name": "Smart New Tab Page",
 	"description": "Creats app icons for your most visited sites",
-	"permissions": ["topSites"],
+
+	"permissions": ["topSites", "<all_urls>"],
+	"content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["jquery-2.1.0.min.js", "popup.js"]
+    }],
+
+
 	"version": "0.1",
 	"incognito": "split",
 	"chrome_url_overrides": {

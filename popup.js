@@ -1,6 +1,5 @@
-// Copyright 2013 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+
+"use strict";
 
 // Event listener for clicks on links in a browser action popup.
 // Open the link in a new tab of the current window.
@@ -21,7 +20,46 @@ function buildPopupDom(mostVisitedURLs) {
     a.href = mostVisitedURLs[i].url;
     a.appendChild(document.createTextNode(mostVisitedURLs[i].title));
     a.addEventListener('click', onAnchorClick);
+    console.log(a.href);
   }
 }
 
 chrome.topSites.get(buildPopupDom);
+
+
+
+
+var domObj;
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "http://www.spauted.com", true);
+xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4) {
+    // JSON.parse does not evaluate the attacker's scripts.
+    //var resp = JSON.parse(xhr.responseText);
+    console.log(xhr.responseText);
+    domObj = $(xhr.responseText);
+    console.log(domObj);
+    getHTML(domObj);
+
+  }
+}
+xhr.send();
+
+function getHTML(domObj){
+  console.log("getHTML");
+  domObj.each(function (elem){
+    if(domObj[elem].localName == "meta"){
+      console.log(domObj[elem]);
+    }
+
+    if(domObj[elem].localName == "link"){
+      console.log(domObj[elem]);
+      if(domObj[elem].rel.indexOf("touch-icon") >= 0){
+        console.log( domObj[elem].outerHTML.split("href")[1].split('"')[1] );
+      }
+
+    }
+
+
+  });
+}
