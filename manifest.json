@@ -1,0 +1,11 @@
+{
+	"name": "Smart New Tab Page",
+	"description": "Creats app icons for your most visited sites",
+	"permissions": ["topSites"],
+	"version": "0.1",
+	"incognito": "split",
+	"chrome_url_overrides": {
+		"newtab": "home.html"
+		},
+		"manifest_version": 2
+	}
