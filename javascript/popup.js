@@ -16,16 +16,16 @@ var mostVisited;
 function buildPopupDom(mostVisitedURLs) {
   mostVisited = mostVisitedURLs;
   var popupDiv = document.getElementById('mostVisited_div');
-  var ol = popupDiv.appendChild(document.createElement('ol'));
+  //var ol = popupDiv.appendChild(document.createElement('ol'));
 
-  for (var i = 0; i < mostVisitedURLs.length; i++) {
+  /*for (var i = 0; i < mostVisitedURLs.length; i++) {
     var li = ol.appendChild(document.createElement('li'));
     var a = li.appendChild(document.createElement('a'));
     a.href = mostVisitedURLs[i].url;
     a.appendChild(document.createTextNode(mostVisitedURLs[i].title));
     a.addEventListener('click', onAnchorClick);
     console.log(a.href);
-  }
+  }*/
 
   var iconElem;
 
@@ -118,9 +118,14 @@ function getUrlIcon(url){
   console.log("getUrlIcon called");
   console.log(url);
   var iconElem = 
-    dom("div", {class: ".col-md-4 icon"},
-      dom("p", {id:"url-text"}, document.createTextNode(url.title) )
+    dom("a", {class: "col-xs-6 col-sm-4 button", id:"icon", href:url.url, target:"_blank"},
+      dom("a", {id:"url-text", href:url.url , target:"_blank"}, document.createTextNode(url.title) )
     );
+
+  /*$(iconElem).click(function(){
+    var win=window.open(url.url, '_blank');
+    win.focus();
+  });*/
 
   return iconElem;
 

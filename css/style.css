@@ -1,0 +1,12 @@
+#icon{
+	width:200px;
+	height:200px;
+	border-radius: 20px;
+	border: 2px solid;
+	border-color: black;
+	margin: 10px;
+}
+
+#icon:hover{
+	background-color: rgba(0, 206, 245, 0.27);
+}
