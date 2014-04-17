@@ -35,38 +35,43 @@ function buildPopupDom(mostVisitedURLs) {
   }
 }
 
-chrome.topSites.get(buildPopupDom);
+var siteUrl = "http://www.spauted.com";
 
+getHTML(siteUrl);
 
+function getHTML(siteUrl){
 
-
-var domObj;
-var xhr = new XMLHttpRequest();
-xhr.open("GET", "http://www.spauted.com", true);
-xhr.onreadystatechange = function() {
-  if (xhr.readyState == 4) {
-    // JSON.parse does not evaluate the attacker's scripts.
-    //var resp = JSON.parse(xhr.responseText);
-    //console.log(xhr.responseText);
-    domObj = $(xhr.responseText);
-    //console.log(domObj);
-    getHTML(domObj);
-
+  var html;
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", siteUrl, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      // JSON.parse does not evaluate the attacker's scripts.
+      //var resp = JSON.parse(xhr.responseText);
+      //console.log(xhr.responseText);
+      html = $(xhr.responseText);
+      //console.log(domObj);
+      var imageUrl = getImageUrl(html);
+      console.log("url: " +  imageUrl);
+    }
   }
+  xhr.send();
 }
-xhr.send();
 
-function getHTML(domObj){
+function getImageUrl(html){
+  var imageUrl;
   console.log("getHTML");
-  domObj.each(function (elem){
-    if(domObj[elem].localName == "meta"){
-      console.log(domObj[elem]);
+  html.each(function (elem){
+    if(html[elem].localName == "meta"){
+      console.log(html[elem]);
     }
 
-    if(domObj[elem].localName == "link"){
-      console.log(domObj[elem]);
-      if(domObj[elem].rel.indexOf("touch-icon") >= 0){
-        console.log( domObj[elem].outerHTML.split("href")[1].split('"')[1] );
+    if(html[elem].localName == "link"){
+      console.log(html[elem]);
+      if(html[elem].rel.indexOf("touch-icon") >= 0){
+        imageUrl = html[elem].outerHTML.split("href")[1].split('"')[1]
+        console.log( imageUrl );
+        return imageUrl;
       }
 
     }
@@ -115,11 +120,19 @@ function setNodeAttribute(node, attribute, value) {
 }
 
 function getUrlIcon(url){
+  var iconText;
+  if(url.title.length < 36){
+    iconText = url.title;
+  }
+  else{
+    iconText = url.title.slice(0,33) + "...";
+  }
   console.log("getUrlIcon called");
   console.log(url);
   var iconElem = 
-    dom("a", {class: "col-xs-6 col-sm-4 button", id:"icon", href:url.url, target:"_blank"},
-      dom("a", {id:"url-text", href:url.url , target:"_blank"}, document.createTextNode(url.title) )
+  dom("a", {class: "col-xs-6 col-sm-4 button", id:"icon", href:url.url, target:"_blank"},
+    dom("img", {id:"icon-image", src:url.url+"/favicon.ico"}),
+    dom("a", {id:"url-text", href:url.url , target:"_blank"}, document.createTextNode(iconText) )
     );
 
   /*$(iconElem).click(function(){
@@ -127,6 +140,16 @@ function getUrlIcon(url){
     win.focus();
   });*/
 
-  return iconElem;
+return iconElem;
 
 }
+
+
+$(document).ready(function(){
+  chrome.topSites.get(buildPopupDom);
+
+  //TODO
+  //not working
+  $("#search-box")[0].focus();
+
+});

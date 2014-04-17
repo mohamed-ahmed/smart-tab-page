@@ -5,6 +5,7 @@
 	border: 1px solid;
 	border-color: white;
 	margin: 10px;
+	text-align: center;
 }
 
 #icon:hover{
@@ -28,6 +29,8 @@ body{
 #url-text{
 	color:white;
 	font-size: 18pt;
+	max-width: 168px;
+	word-wrap: break-word;
 }
 
 body{
@@ -39,4 +42,17 @@ body{
 	margin-top: 100px;
 	margin-bottom : 40px;
 	font-size: 20px;
+}
+
+#icon-image{
+	height: 64px;
+	width: 64px;
+	margin: auto;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	display:block;
+}
+
+#mostVisited_div{
+	margin-left: 10px;
 }
