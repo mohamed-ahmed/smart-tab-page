@@ -6,6 +6,7 @@
 	border-color: white;
 	margin: 10px;
 	text-align: center;
+	overflow: hidden
 }
 
 #icon:hover{
