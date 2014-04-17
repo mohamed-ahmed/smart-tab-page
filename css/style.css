@@ -2,7 +2,7 @@
 	width:200px;
 	height:200px;
 	border-radius: 20px;
-	border: 2px solid;
+	border: 1px solid;
 	border-color: white;
 	margin: 10px;
 }
@@ -21,6 +21,8 @@ body{
 	background: linear-gradient(to bottom,  #5e61ff 0%,#ef017c 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5e61ff', endColorstr='#ef017c',GradientType=0 ); /* IE6-9 */
 
+	background-repeat:no-repeat;
+	background-attachment:fixed;
 }
 
 #url-text{
@@ -30,4 +32,11 @@ body{
 
 body{
 	height:100vh
+}
+
+#search-box{
+	width:100%;
+	margin-top: 100px;
+	margin-bottom : 40px;
+	font-size: 20px;
 }
