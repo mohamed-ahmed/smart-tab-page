@@ -6,7 +6,7 @@
 	"content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["jquery-2.1.0.min.js", "popup.js"]
+      "js": ["javascript/jquery-2.1.0.min.js", "javascript/popup.js"]
     }],
 
 
