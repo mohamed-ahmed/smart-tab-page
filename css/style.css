@@ -3,10 +3,31 @@
 	height:200px;
 	border-radius: 20px;
 	border: 2px solid;
-	border-color: black;
+	border-color: white;
 	margin: 10px;
 }
 
 #icon:hover{
 	background-color: rgba(0, 206, 245, 0.27);
+}
+
+body{
+	background: #5e61ff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #5e61ff 0%, #ef017c 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5e61ff), color-stop(100%,#ef017c)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #5e61ff 0%,#ef017c 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #5e61ff 0%,#ef017c 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #5e61ff 0%,#ef017c 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #5e61ff 0%,#ef017c 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5e61ff', endColorstr='#ef017c',GradientType=0 ); /* IE6-9 */
+
+}
+
+#url-text{
+	color:white;
+	font-size: 18pt;
+}
+
+body{
+	height:100vh
 }
