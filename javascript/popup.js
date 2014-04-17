@@ -22,11 +22,6 @@ function buildPopupDom(mostVisitedURLs) {
     a.addEventListener('click', onAnchorClick);
     console.log(a.href);
   }
-
-  for (var i = 0; i < mostVisitedURLs.length; i++) {
-    var iconElem = getUrlIcon(mostVisitedURLs[i]);
-    $("#mostVisited_div").appendChild(iconElem);
-  }
 }
 
 chrome.topSites.get(buildPopupDom);
@@ -41,10 +36,10 @@ xhr.onreadystatechange = function() {
   if (xhr.readyState == 4) {
     // JSON.parse does not evaluate the attacker's scripts.
     //var resp = JSON.parse(xhr.responseText);
-    //console.log(xhr.responseText);
-    //domObj = $(xhr.responseText);
-    //console.log(domObj);
-    //getHTML(domObj);
+    console.log(xhr.responseText);
+    domObj = $(xhr.responseText);
+    console.log(domObj);
+    getHTML(domObj);
 
   }
 }
@@ -67,50 +62,4 @@ function getHTML(domObj){
 
 
   });
-}
-
-
-
-function dom(name, attributes) {
-  var node = document.createElement(name);
-  if (attributes) {
-    forEachIn(attributes, function(name, value) {
-      setNodeAttribute(node, name, value);
-    });
-  }
-  for (var i = 2; i < arguments.length; i++) {
-    var child = arguments[i];
-    if (typeof child == "string")
-      child = document.createTextNode(child);
-    node.appendChild(child);
-  }
-  return node;
-}
-
-function forEachIn(object, action) {
-  for (var property in object) {
-    if (object.hasOwnProperty(property))
-      action(property, object[property]);
-  }
-}
-
-function setNodeAttribute(node, attribute, value) {
-  if (attribute == "class")
-    node.className = value;
-  else if (attribute == "checked")
-    node.defaultChecked = value;
-  else if (attribute == "for")
-    node.htmlFor = value;
-  else if (attribute == "style")
-    node.style.cssText = value;
-  else
-    node.setAttribute(attribute, value);
-}
-
-function getUrlIcon(url){
-  var iconElem = 
-    dom("div", {class: ".col-md-4 icon"},
-      dom("p", {id:"url-text"}, document.createTextNode(url.title) )
-    );
-
 }
