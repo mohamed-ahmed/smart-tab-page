@@ -35,11 +35,12 @@ function buildPopupDom(mostVisitedURLs) {
   }
 }
 
-var siteUrl = "http://www.spauted.com";
+//var siteUrl = "http://www.spauted.com";
 
-getHTML(siteUrl);
+//getHTML(siteUrl);
 
-function getHTML(siteUrl){
+function getHTML(siteUrl, elem){
+  console.log("getHTML: " + siteUrl);
 
   var html;
   var xhr = new XMLHttpRequest();
@@ -51,26 +52,38 @@ function getHTML(siteUrl){
       //console.log(xhr.responseText);
       html = $(xhr.responseText);
       //console.log(domObj);
-      var imageUrl = getImageUrl(html);
-      console.log("url: " +  imageUrl);
+      getImageUrl(siteUrl, html, elem);
     }
   }
   xhr.send();
 }
 
-function getImageUrl(html){
+function getImageUrl(siteUrl, html, imgElem){
+  console.log("gettingImage: " + siteUrl);
   var imageUrl;
-  console.log("getHTML");
+  var absUrl;
   html.each(function (elem){
     if(html[elem].localName == "meta"){
       console.log(html[elem]);
+      if(html[elem].property.indexOf("touch-icon") >= 0){
+
+      }
     }
 
     if(html[elem].localName == "link"){
       console.log(html[elem]);
       if(html[elem].rel.indexOf("touch-icon") >= 0){
-        imageUrl = html[elem].outerHTML.split("href")[1].split('"')[1]
-        console.log( imageUrl );
+        imageUrl = html[elem].outerHTML.split("href")[1].split('"')[1];
+        console.log("imageUrl: " + imageUrl );
+        console.log("elem: ");
+        console.log(imgElem);
+        if(imageUrl.indexOf("http") >= 0){
+          absUrl = imageUrl;
+        }
+        else{
+          absUrl = siteUrl + imageUrl;
+        }
+        imgElem.attr("src", absUrl);
         return imageUrl;
       }
 
@@ -127,13 +140,26 @@ function getUrlIcon(url){
   else{
     iconText = url.title.slice(0,33) + "...";
   }
+
+  var facivonUrl;
+  if(url.url.indexOf("/", 8) > 0 ){
+    facivonUrl = url.url.slice( 0, url.url.indexOf("/", 8)) + "/favicon.ico";
+  }
+  else{
+    facivonUrl = url.url + "favicon.ico";
+  }
+  console.log("facivonUrl");
+  console.log(facivonUrl);
+
   console.log("getUrlIcon called");
   console.log(url);
   var iconElem = 
   dom("a", {class: "col-xs-6 col-sm-4 button", id:"icon", href:url.url, target:"_blank"},
-    dom("img", {id:"icon-image", src:url.url+"favicon.ico", alt:""}),
+    dom("img", {id:"icon-image", src : facivonUrl, alt:""}),
     dom("a", {id:"url-text", href:url.url , target:"_blank"}, document.createTextNode(iconText) )
-    );
+  );
+
+  getHTML(url.url, $(iconElem).find("#icon-image"));
 
   /*$(iconElem).click(function(){
     var win=window.open(url.url, '_blank');
