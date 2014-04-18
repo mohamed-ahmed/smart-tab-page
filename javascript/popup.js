@@ -52,7 +52,7 @@ function getHTML(siteUrl, elem){
       //console.log(xhr.responseText);
       html = $(xhr.responseText);
       //console.log(domObj);
-      getImageUrl(siteUrl, html, elem);
+      getImageUrl(siteUrl, xhr.responseText, elem);
     }
   }
   xhr.send();
@@ -62,16 +62,35 @@ function getImageUrl(siteUrl, html, imgElem){
   console.log("gettingImage: " + siteUrl);
   var imageUrl;
   var absUrl;
-  html.each(function (elem){
-    if(html[elem].localName == "meta"){
-      console.log(html[elem]);
-      if(html[elem].property.indexOf("touch-icon") >= 0){
 
+  //console.log(html);
+  var occuranceIndex = html.indexOf('property="og:image')
+  if(occuranceIndex >= 0){
+    var indexOfBracket = html.indexOf(">", occuranceIndex );
+    var htmlArray = html.slice(occuranceIndex-1, indexOfBracket);
+    console.log("htmlArray: ");
+    console.log(htmlArray);
+}
+
+
+  html.each(function (elem){
+    /*if(html[elem].localName == "meta"){
+      console.log(html[elem]);
+      if(html[elem].attributes){
+        console.log(html[elem].attributes);
+        for(var  i = 0; i < html[elem].attributes.length ; i++){
+          var attr = html[elem].attributes[i];
+          if(attr.localName == "meta"){
+            console.log("meta attr:" );
+            console.log(attr);
+          }
+        }
       }
-    }
+    }*/
+
 
     if(html[elem].localName == "link"){
-      console.log(html[elem]);
+      //console.log(html[elem]);
       if(html[elem].rel.indexOf("touch-icon") >= 0){
         imageUrl = html[elem].outerHTML.split("href")[1].split('"')[1];
         console.log("imageUrl: " + imageUrl );
