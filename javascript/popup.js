@@ -1,5 +1,6 @@
 
 "use strict";
+var globalHTML
 
 // Event listener for clicks on links in a browser action popup.
 // Open the link in a new tab of the current window.
@@ -51,7 +52,8 @@ function getHTML(siteUrl, elem){
       //var resp = JSON.parse(xhr.responseText);
       //console.log(xhr.responseText);
       html = $(xhr.responseText);
-      //console.log(domObj);
+      globalHTML = html;
+      console.log(html);
       getImageUrl(siteUrl, xhr.responseText, elem);
     }
   }
@@ -59,57 +61,90 @@ function getHTML(siteUrl, elem){
 }
 
 function getImageUrl(siteUrl, html, imgElem){
+  /*console.log("html: ");
+  console.log(html);*/
   console.log("gettingImage: " + siteUrl);
   var imageUrl;
   var absUrl;
 
   //console.log(html);
-  var occuranceIndex = html.indexOf('property="og:image')
-  if(occuranceIndex >= 0){
-    var indexOfBracket = html.indexOf(">", occuranceIndex );
-    var htmlArray = html.slice(occuranceIndex-1, indexOfBracket);
+
+  var occuranceIndex2 = html.indexOf('rel="apple-touch-icon');
+  if(occuranceIndex2 >= 0){
+    var indexOfBracket = html.indexOf(">", occuranceIndex2 );
+    var htmlArray = html.slice(occuranceIndex2-1, indexOfBracket);
     console.log("htmlArray: ");
     console.log(htmlArray);
-}
+    console.log("image url should be: ");
+    var partURL = getAttributeValue(htmlArray, "href");
 
+    var fullURL = getFullImageURL(siteUrl, partURL);
 
-  html.each(function (elem){
-    /*if(html[elem].localName == "meta"){
-      console.log(html[elem]);
-      if(html[elem].attributes){
-        console.log(html[elem].attributes);
-        for(var  i = 0; i < html[elem].attributes.length ; i++){
-          var attr = html[elem].attributes[i];
-          if(attr.localName == "meta"){
-            console.log("meta attr:" );
-            console.log(attr);
-          }
-        }
+    console.log(fullURL);
+
+    tryImage(fullURL, 
+      function(){
+        imgElem.attr("src", fullURL);
+      },
+      function(){
+        imgElem.attr("src", "browser-icon.png");
       }
-    }*/
+     );
+
+  }
+  else{
+    var occuranceIndex = html.indexOf('property="og:image');
+    if(occuranceIndex >= 0){
+      var indexOfBracket = html.indexOf(">", occuranceIndex );
+      var htmlArray = html.slice(occuranceIndex-1, indexOfBracket);
+      console.log("htmlArray: ");
+      console.log(htmlArray);
+      console.log("image url should be: ");
+      var partURL = getAttributeValue(htmlArray, "content");
+
+      var fullURL = getFullImageURL(siteUrl, partURL);
+
+      console.log(fullURL);
+      tryImage(fullURL, 
+        function(){
+          imgElem.attr("src", fullURL);
+        },
+        function(){
+          imgElem.attr("src", "browser-icon.png");
+        }
+       );
+    }
+  }
+
+  
+
+  /*var jqueryHTML = $(html)
+  console.log("jqueryHTML");
+  console.log(jqueryHTML)
+  for(var i = 0; i < jqueryHTML.length ; i++){
+    console.log("jqueryHTML[i]: ")
+    console.log(jqueryHTML[i])
+    if(jqueryHTML[i].localName == "meta"){
+      console.log("meta element: ");
+      console.log(jqueryHTML[i]);
+    
+    }
 
 
-    if(html[elem].localName == "link"){
+    /*if(html[elem].localName == "link"){
       //console.log(html[elem]);
       if(html[elem].rel.indexOf("touch-icon") >= 0){
         imageUrl = html[elem].outerHTML.split("href")[1].split('"')[1];
         console.log("imageUrl: " + imageUrl );
-        console.log("elem: ");
-        console.log(imgElem);
-        if(imageUrl.indexOf("http") >= 0){
-          absUrl = imageUrl;
-        }
-        else{
-          absUrl = siteUrl + imageUrl;
-        }
-        imgElem.attr("src", absUrl);
-        return imageUrl;
+        
       }
 
     }
 
 
-  });
+  }*/
+
+
 }
 
 
@@ -160,22 +195,34 @@ function getUrlIcon(url){
     iconText = url.title.slice(0,33) + "...";
   }
 
-  var facivonUrl;
+  var faviconUrl;
   if(url.url.indexOf("/", 8) > 0 ){
-    facivonUrl = url.url.slice( 0, url.url.indexOf("/", 8)) + "/favicon.ico";
+    faviconUrl = url.url.slice( 0, url.url.indexOf("/", 8)) + "/favicon.ico";
   }
   else{
-    facivonUrl = url.url + "favicon.ico";
+    faviconUrl = url.url + "favicon.ico";
   }
-  console.log("facivonUrl");
-  console.log(facivonUrl);
+  console.log("faviconUrl");
+  console.log(faviconUrl);
+
+
 
   console.log("getUrlIcon called");
   console.log(url);
   var iconElem = 
   dom("a", {class: "col-xs-6 col-sm-4 button", id:"icon", href:url.url, target:"_blank"},
-    dom("img", {id:"icon-image", src : facivonUrl, alt:""}),
+    dom("img", {id:"icon-image", src : faviconUrl, alt:""}),
     dom("a", {id:"url-text", href:url.url , target:"_blank"}, document.createTextNode(iconText) )
+  );
+
+  tryImage(faviconUrl,
+    function(){  
+    },
+    function(){
+      console.log("favicon failure");
+      faviconUrl = "/browser-icon.png";
+      $(iconElem).find("#icon-image").attr("src", faviconUrl);
+    }
   );
 
   getHTML(url.url, $(iconElem).find("#icon-image"));
@@ -211,3 +258,33 @@ $("#search-box").ready(function(){
   $("#search-box")[0].focus();
 
 });
+
+function getFullImageURL(siteUrl, imagePath){
+  var absUrl;
+
+  if(imagePath.indexOf("//") == 0){
+    absUrl = "http:" + imagePath;
+  }
+
+  else if(imagePath.indexOf("http") >= 0){
+    absUrl = imagePath;
+  }
+  else{
+    absUrl = siteUrl + imagePath;
+  }
+  return absUrl;
+}
+
+function getAttributeValue(htmlText, attribute){
+  return htmlText.split(attribute + "=" )[1].split('"')[1]
+}
+
+
+function tryImage(url, success, failure){
+  $.ajax({
+    type: "GET",
+    url: url,
+    success: success,
+    error: failure
+ });
+}
