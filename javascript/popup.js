@@ -92,7 +92,7 @@ function getImageUrl(siteUrl, html, imgElem){
      );
 
   }
-  else{
+  else if(html.indexOf('property="og:image') >= 0) {
     var occuranceIndex = html.indexOf('property="og:image');
     if(occuranceIndex >= 0){
       var indexOfBracket = html.indexOf(">", occuranceIndex );
