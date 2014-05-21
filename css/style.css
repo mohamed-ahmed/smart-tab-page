@@ -1,7 +1,7 @@
 #icon{
-	width:200px;
-	height:200px;
-	border-radius: 20px;
+	width:16vh;
+	height:16vh;
+	border-radius: 2vh;
 	border: 1px solid;
 	border-color: white;
 	margin: 10px;
@@ -29,7 +29,7 @@ body{
 
 #url-text{
 	color:white;
-	font-size: 18pt;
+	font-size: 2vh;
 	max-width: 168px;
 	word-wrap: break-word;
 }
@@ -46,11 +46,11 @@ body{
 }
 
 #icon-image{
-	height: 64px;
-	width: 64px;
+	height: 5vh;
+	width: 5vh;
 	margin: auto;
-	margin-top: 20px;
-	margin-bottom: 10px;
+	margin-top: 1.6vh;
+	margin-bottom: 0.8vh;
 	display:block;
 }
 

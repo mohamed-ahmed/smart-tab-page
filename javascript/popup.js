@@ -195,6 +195,19 @@ $(document).ready(function(){
 
   //TODO
   //not working
+  console.log("setting focus");
+  console.log($("#search-box")[0]);
+  $("#search-box")[0].focus();
+
+});
+
+
+$("#search-box").ready(function(){
+
+  //TODO
+  //not working
+  console.log("setting focus");
+  console.log($("#search-box")[0]);
   $("#search-box")[0].focus();
 
 });
