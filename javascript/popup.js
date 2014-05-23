@@ -195,13 +195,8 @@ function getUrlIcon(url){
     iconText = url.title.slice(0,33) + "...";
   }
 
-  var faviconUrl;
-  if(url.url.indexOf("/", 8) > 0 ){
-    faviconUrl = url.url.slice( 0, url.url.indexOf("/", 8)) + "/favicon.ico";
-  }
-  else{
-    faviconUrl = url.url + "favicon.ico";
-  }
+  var faviconUrl = getFaviconUrl(url.url)
+
   console.log("faviconUrl");
   console.log(faviconUrl);
 
@@ -287,4 +282,16 @@ function tryImage(url, success, failure){
     success: success,
     error: failure
  });
+}
+
+function getFaviconUrl(url){
+  var faviconUrl;
+  if(url.indexOf("/", 8) > 0 ){
+    faviconUrl = url.slice( 0, url.indexOf("/", 8)) + "/favicon.ico";
+  }
+  else{
+    faviconUrl = url + "favicon.ico";
+  }
+
+  return faviconUrl;
 }
