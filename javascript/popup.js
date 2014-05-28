@@ -207,7 +207,7 @@ function getUrlIcon(url){
   var iconElem = 
   dom("a", {class: "col-xs-6 col-sm-4 button", id:"icon", href:url.url, target:"_blank"},
     dom("img", {id:"icon-image", src : faviconUrl, alt:""}),
-    dom("a", {id:"url-text", href:url.url , target:"_blank"}, document.createTextNode(iconText) )
+    dom("a", {id:"url-text", href:url.url}, document.createTextNode(iconText) )
   );
 
   tryImage(faviconUrl,
